@@ -33,15 +33,20 @@ def main():
         st.markdown("Upload your data file to get started (CSV, Excel, or other supported formats)")
         
         uploaded_file = st.file_uploader("Upload File", type=None)  # Accept any file type
-        df = None
         if uploaded_file is not None:
             try:
                 df = load_dataframe(uploaded_file)
+                st.session_state['df'] = df  # Store in session state
                 st.success("File loaded successfully!")
                 st.dataframe(df.head())
             except Exception as e:
                 st.error(f"Error loading file: {e}")
+        elif 'df' in st.session_state:
+            df = st.session_state['df']
+            st.info("Using previously uploaded file.")
+            st.dataframe(df.head())
         else:
+            df = None
             st.info("Please upload a data file.")
         
     with col2:
@@ -55,9 +60,14 @@ def main():
     # Results section
     st.header("Results")
     if generate_btn:
-        if df is not None:
+        if 'df' in st.session_state and st.session_state['df'] is not None:
             try:
-                synth_df = generate_synthetic_data(df, n_rows=int(n_rows), model_type=model_type, privacy_level=privacy_level)
+                synth_df = generate_synthetic_data(
+                    st.session_state['df'],
+                    n_rows=int(n_rows),
+                    model_type=model_type,
+                    privacy_level=privacy_level
+                )
                 st.success(f"Generated {len(synth_df)} synthetic rows.")
                 st.dataframe(synth_df.head())
                 csv = synth_df.to_csv(index=False).encode('utf-8')
