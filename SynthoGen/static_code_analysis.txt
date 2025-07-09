@@ -1,0 +1,95 @@
+Run started:2025-06-30 21:55:36.447170
+
+Test results:
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.7.7/plugins/b110_try_except_pass.html
+   Location: ./sdv/_utils.py:343:8
+342	
+343	        except Exception:
+344	            pass
+345	
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '#'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.7.7/plugins/b105_hardcoded_password_string.html
+   Location: ./sdv/constraints/tabular.py:1160:16
+1159	    def _get_diff_column_name(self, table_data):
+1160	        token = '#'
+1161	        columns = [self._column_name, self._low_value, self._high_value]
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.7.7/plugins/b101_assert_used.html
+   Location: ./sdv/data_processing/utils.py:17:4
+16	    """
+17	    assert path.exists(), 'The expected file was not found.'
+18	    module_path = path.parent
+
+--------------------------------------------------
+>> Issue: [B306:blacklist] Use of insecure and deprecated function (mktemp).
+   Severity: Medium   Confidence: High
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   More Info: https://bandit.readthedocs.io/en/1.7.7/blacklists/blacklist_calls.html#b306-mktemp-q
+   Location: ./sdv/logging/utils.py:41:19
+40	    elif os.access(store_path, os.W_OK):
+41	        tmp_path = tempfile.mktemp(dir=store_path, suffix='.yml')
+42	        shutil.copyfile(config_path, tmp_path)
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'id'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.7.7/plugins/b105_hardcoded_password_string.html
+   Location: ./sdv/metadata/single_table.py:499:24
+498	        for token in tokens:
+499	            if token == 'id':
+500	                return 'id'
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.7.7/plugins/b110_try_except_pass.html
+   Location: ./sdv/metadata/single_table.py:555:12
+554	
+555	            except Exception:
+556	                pass
+557	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.7.7/plugins/b110_try_except_pass.html
+   Location: ./sdv/multi_table/hma.py:361:12
+360	                    index.append(foreign_key_value)
+361	            except Exception:
+362	                # Skip children rows subsets that fail
+363	                pass
+364	
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 15600
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 6
+		Medium: 1
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 2
+		High: 5
+Files skipped (0):
