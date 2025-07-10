@@ -1,5 +1,6 @@
-streamlit
-numpy
-pandas
--e ./Syntho-Gen
+pandas==2.2.2
+fpdf==1.7.2
+sdv==1.13.1
+streamlit==1.46.1
+torch==2.3.1
 
