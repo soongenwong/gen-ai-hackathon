@@ -69,12 +69,15 @@ def load_dataframe(uploaded_file) -> pd.DataFrame:
         if file_ext in ['.csv', '.tsv'] or (mime_type and 'csv' in mime_type):
             sep = '\t' if file_ext == '.tsv' else ','
             df = pd.read_csv(uploaded_file, sep=sep)
+            df = df.dropna(axis=1, how='all')  # Drop columns with all null values
         elif file_ext in ['.xls', '.xlsx'] or (mime_type and 'excel' in mime_type):
             df = pd.read_excel(uploaded_file)
+            df = df.dropna(axis=1, how='all')
         elif file_ext == '.txt' or (mime_type and 'text' in mime_type):
             # Try to read as CSV, else as plain text
             try:
                 df = pd.read_csv(uploaded_file)
+                df = df.dropna(axis=1, how='all')
             except Exception:
                 uploaded_file.seek(0)
                 text = uploaded_file.read().decode('utf-8', errors='ignore') if hasattr(uploaded_file, 'read') else uploaded_file.getvalue().decode('utf-8', errors='ignore')
@@ -91,6 +94,7 @@ def load_dataframe(uploaded_file) -> pd.DataFrame:
                         tables.append(pd.DataFrame(table[1:], columns=table[0]))
                 if tables:
                     df = pd.concat(tables, ignore_index=True)
+                    df = df.dropna(axis=1, how='all')
                 else:
                     # Fallback: extract text
                     text = '\n'.join(page.extract_text() or '' for page in pdf.pages)
@@ -107,6 +111,7 @@ def load_dataframe(uploaded_file) -> pd.DataFrame:
                 tables.append(pd.DataFrame(data))
             if tables:
                 df = pd.concat(tables, ignore_index=True)
+                df = df.dropna(axis=1, how='all')
             else:
                 # Fallback: extract all text
                 text = '\n'.join([p.text for p in doc.paragraphs])
