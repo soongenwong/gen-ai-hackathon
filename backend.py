@@ -445,6 +445,35 @@ def dataframe_to_csv_bytes(df: pd.DataFrame) -> bytes:
     return data
 
 
+def dataframe_to_pdf_bytes(df, max_rows=200):
+    pdf = FPDF()
+    pdf.add_page()
+    # Add a Unicode font (ensure the TTF file is in your project directory)
+    font_path = "DejaVuSans.ttf"  # Adjust path if needed
+    pdf.add_font('DejaVu', '', font_path, uni=True)
+    pdf.set_font('DejaVu', '', 8)
+    col_width = pdf.w / (len(df.columns) + 1)
+    row_height = pdf.font_size * 1.5
+
+    # Header
+    for col in df.columns:
+        pdf.cell(col_width, row_height, str(col), border=1)
+    pdf.ln(row_height)
+
+    # Rows (limit to max_rows for performance)
+    for i, row in df.head(max_rows).iterrows():
+        for item in row:
+            pdf.cell(col_width, row_height, str(item), border=1)
+        pdf.ln(row_height)
+
+    # Save to bytes
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
+        pdf.output(tmp.name)
+        tmp.seek(0)
+        pdf_bytes = tmp.read()
+    return pdf_bytes
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 # Optional CLI for local testing
 # ──────────────────────────────────────────────────────────────────────────────
